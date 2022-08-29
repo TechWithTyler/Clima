@@ -23,6 +23,8 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UITextFie
 
 	let locationManager = CLLocationManager()
 
+	var weatherURL: URL? = nil
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
@@ -30,7 +32,7 @@ class WeatherViewController: UIViewController, WeatherManagerDelegate, UITextFie
 		weatherManager.delegate = self
 		searchTextField.delegate = self
 		locationManager.delegate = self
-		locationManager.requestWhenInUseAuthorization()
+		locationManager.requestAlwaysAuthorization()
 		locationManager.requestLocation()
 	}
 
@@ -87,6 +89,10 @@ extension WeatherViewController {
 			temperatureLabel?.text = weather.temperatureString
 			conditionImageView?.image = UIImage(systemName: weather.conditionName)
 		}
+	}
+
+	func weatherManager(_ weatherManager: WeatherManager, didGenerateURL url: URL) {
+		weatherURL = url
 	}
 
 	func weatherManager(_ weatherManager: WeatherManager, didFailWithError error: Error) {
@@ -151,12 +157,9 @@ extension WeatherViewController {
 			case 1:
 				message = "Location permissions denied"
 				info = "Please check your location settings and try again."
-			case 4865:
-				message = "Invalid city name"
-				info = "Please check the city name and try again."
 			default:
-				message = "Unknown error (code \(error.code))"
-				info = nil
+				message = "Invalid data"
+				info = "Try checking the entered city name. Press the location button to return to your current location's data."
 		}
 		DispatchQueue.main.async { [self] in
 			let alert = UIAlertController(title: message, message: info, preferredStyle: .alert)

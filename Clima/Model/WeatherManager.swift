@@ -15,6 +15,8 @@ protocol WeatherManagerDelegate {
 
 	func weatherManager(_ weatherManager: WeatherManager, didUpdateWeatherUsingModel weather: WeatherModel)
 
+	func weatherManager(_ weatherManager: WeatherManager, didGenerateURL url: URL)
+
 	func weatherManager(_ weatherManager: WeatherManager, didFailWithError error: Error)
 
 }
@@ -44,6 +46,9 @@ struct WeatherManager {
 				if let error = error {
 					self.delegate?.weatherManager(self, didFailWithError: error)
 					return
+				}
+				if let url = response?.url {
+					self.delegate?.weatherManager(self, didGenerateURL: url)
 				}
 				if let safeData = data {
 					if let weather = self.parseJSON(safeData) {
