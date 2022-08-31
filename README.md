@@ -7,5 +7,3 @@ Create a file called `Secrets.xcconfig` in the root directory of your project.
 
 Add the following to the file:
 `OpenWeatherMapAPIKey = <API key goes here>`
-
-#  Add Secrets.xcconfig to your repo's .gitignore to prevent it (or other secrets you may have in your app) from being committed to GitHub.
